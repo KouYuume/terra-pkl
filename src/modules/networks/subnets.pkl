@@ -3,47 +3,61 @@ import ".../src/var.pkl"
 import "@aws/vpc/NatGateway.pkl"
 import "vpc.pkl"
 
-subnet_pub_a: Subnet = new {
-  tfName = "\(var.prefix)subnet_pub_a"
-  vpc_id = vpc.vpc.id
-  cidr_block = "10.0.0.0/20"
-  availability_zone = "ap-northeast-1a"
-  map_public_ip_on_launch = true
-  tags {
-    ["Name"] = tfName
+class SubnetAttribute {
+  tfName: String
+  cidr_block: String
+  availability_zone: String
+  map_public_ip_on_launch: Boolean
+}
+
+local subnetAttribues: Listing<SubnetAttribute> = new {
+  new {
+    tfName = "\(var.prefix)subnet_pub_a"
+    cidr_block = "10.0.0.0/20"
+    availability_zone = "ap-northeast-1a"
+    map_public_ip_on_launch = true
+  }
+  new {
+    tfName = "\(var.prefix)subnet_pub_c"
+    cidr_block = "10.0.80.0/20"
+    availability_zone = "ap-northeast-1c"
+    map_public_ip_on_launch = true
+  }
+  new {
+    tfName = "\(var.prefix)subnet_priv_a"
+    cidr_block = "10.0.64.0/20"
+    availability_zone = "ap-northeast-1a"
+    map_public_ip_on_launch = false
+  }
+  new {
+    tfName = "\(var.prefix)subnet_priv_c"
+    cidr_block = "10.0.16.0/20"
+    availability_zone = "ap-northeast-1c"
+    map_public_ip_on_launch = false
+  }
+}
+  
+local subnets: Listing<Subnet> = new {
+  default {
+    vpc_id = vpc.vpc.id
+  }
+  for (subnetAttribute in subnetAttribues) {
+    new {
+      tfName = subnetAttribute.tfName
+      cidr_block = subnetAttribute.cidr_block
+      availability_zone = subnetAttribute.availability_zone
+      map_public_ip_on_launch = subnetAttribute.map_public_ip_on_launch
+      tags {
+        ["Name"] = tfName
+      }
+    }
   }
 }
 
-subnet_pub_c: Subnet = new {
-  tfName = "\(var.prefix)subnet_pub_c"
-  vpc_id = vpc.vpc.id
-  cidr_block = "10.0.80.0/20"
-  availability_zone = "ap-northeast-1c"
-  map_public_ip_on_launch = true
-  tags {
-    ["Name"] = tfName
-  }
-}
-
-subnet_priv_a: Subnet = new {
-  tfName = "\(var.prefix)subnet_priv_a"
-  vpc_id = vpc.vpc.id
-  cidr_block = "10.0.64.0/20"
-  availability_zone = "ap-northeast-1a"
-  tags {
-    ["Name"] = tfName
-  }
-}
-
-subnet_priv_c: Subnet = new {
-  tfName = "\(var.prefix)subnet_priv_c"
-  vpc_id = vpc.vpc.id
-  cidr_block = "10.0.16.0/20"
-  availability_zone = "ap-northeast-1c"
-  tags {
-    ["Name"] = tfName
-  }
-}
+subnet_pub_a = subnets[0]
+subnet_pub_c = subnets[1]
+subnet_priv_a = subnets[2]
+subnet_priv_c = subnets[3]
 
 ngw_a: NatGateway = new {
   tfName = "\(var.prefix)ngw_a"
