@@ -1,0 +1,26 @@
+import "src/main.pkl"
+
+local STAGE = read("prop:STAGE")
+
+output {
+  files {
+    when (STAGE == "dev") {
+      ["dev/main.tf.json"] {
+        renderer = new JsonRenderer {}
+        value = main
+      }
+    } 
+    when (STAGE == "stg") {
+      ["stg/main.tf.json"] {
+        renderer = new JsonRenderer {}
+        value = main
+      }
+    }
+    when (STAGE == "prod") {
+      ["prod/main.tf.json"] {
+        renderer = new JsonRenderer {}
+        value = main
+      }
+    }
+  }
+}

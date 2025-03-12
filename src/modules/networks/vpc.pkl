@@ -1,0 +1,36 @@
+import "@aws/vpc/VPC.pkl"
+import "@aws/vpc/InternetGateway.pkl"
+import "@aws/vpc/ElasticIP.pkl"
+import ".../src/var.pkl"
+
+vpc: VPC = new {
+  tfName = "\(var.prefix)vpc"
+  cidr_block = "10.0.0.0/16"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+igw: InternetGateway = new {
+  tfName = "\(var.prefix)igw"
+  vpc_id = vpc.id
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+eip_a: ElasticIP = new {
+  tfName = "\(var.prefix)eip_a"
+  domain = "vpc"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+eip_c: ElasticIP = new {
+  tfName = "\(var.prefix)eip_c"
+  domain = "vpc"
+  tags {
+    ["Name"] = tfName
+  }
+}

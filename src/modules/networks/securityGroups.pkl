@@ -1,0 +1,71 @@
+import "@aws/vpc/SecurityGroup.pkl"
+import "@aws/vpc/SecurityGroupEgressRule.pkl"
+import "@aws/vpc/SecurityGroupIngressRule.pkl"
+import ".../src/var.pkl"
+import "vpc.pkl"
+
+sg_bastion: SecurityGroup = new {
+  tfName = "\(var.prefix)sg_bastion"
+  vpc_id = vpc.vpc.id
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sgir_ssh: SecurityGroupIngressRule = new {
+  tfName = "\(var.prefix)sgir_ssh"
+  security_group_id = sg_bastion.id
+  ip_protocol = "-1"
+  cidr_ipv4 = "0.0.0.0/0"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sg_default: SecurityGroup = new {
+  tfName = "\(var.prefix)sg_default"
+  vpc_id = vpc.vpc.id
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sgir_all: SecurityGroupIngressRule = new {
+  tfName = "\(var.prefix)sgir_all"
+  security_group_id = sg_default.id
+  ip_protocol = "-1"
+  cidr_ipv4 = "0.0.0.0/0"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sger_all: SecurityGroupEgressRule = new {
+  tfName = "\(var.prefix)sger_all"
+  security_group_id = sg_default.id
+  ip_protocol = "-1"
+  cidr_ipv4 = "0.0.0.0/0"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sg_alb: SecurityGroup = new {
+  tfName = "\(var.prefix)sg_alb"
+  vpc_id = vpc.vpc.id
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+sgir_http: SecurityGroupIngressRule = new {
+  tfName = "\(var.prefix)sgir_http"
+  security_group_id = sg_alb.id
+  ip_protocol = "tcp"
+  from_port = 80
+  to_port = 80
+  cidr_ipv4 = "0.0.0.0/0"
+  tags {
+    ["Name"] = tfName
+  }
+}

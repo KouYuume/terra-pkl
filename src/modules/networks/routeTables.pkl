@@ -1,0 +1,81 @@
+import "@aws/vpc/RouteTable.pkl"
+import "@aws/vpc/RouteTableAssociation.pkl"
+import ".../src/var.pkl"
+import "vpc.pkl"
+import "subnets.pkl"
+
+route_table_pub: RouteTable = new {
+  tfName = "\(var.prefix)rt_pub"
+  vpc_id = vpc.vpc.id
+  route {
+    new {
+      cidr_block = "0.0.0.0/0"
+      gateway_id = vpc.igw.id
+    }
+    new {
+      cidr_block = vpc.vpc.cidr_block!!
+      gateway_id = "local"
+    }
+  }
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+route_table_priv_a: RouteTable = new {
+  tfName = "\(var.prefix)rt_priv_a"
+  vpc_id = vpc.vpc.id
+  route {
+    new {
+      cidr_block = "0.0.0.0/0"
+      gateway_id = subnets.ngw_a.id
+    }
+    new {
+      cidr_block = vpc.vpc.cidr_block!!
+      gateway_id = "local"
+    }
+  }
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+route_table_priv_c: RouteTable = new {
+  tfName = "\(var.prefix)rt_priv_c"
+  vpc_id = vpc.vpc.id
+  route {
+    new {
+      cidr_block = "0.0.0.0/0"
+      gateway_id = subnets.ngw_c.id
+    }
+    new {
+      cidr_block = "10.0.0.0/16"
+      gateway_id = "local"
+    }
+  }
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+routeTableAssociations: Listing<RouteTableAssociation> = new {
+  new {
+    tfName = "\(var.prefix)rta_pub_a"
+    route_table_id = route_table_pub.id
+    subnet_id = subnets.subnet_pub_a.id
+  }
+  new {
+    tfName = "\(var.prefix)rta_pub_c"
+    route_table_id = route_table_pub.id
+    subnet_id = subnets.subnet_pub_c.id
+  }
+  new {
+    tfName = "\(var.prefix)rta_priv_a"
+    route_table_id = route_table_priv_a.id
+    subnet_id = subnets.subnet_priv_a.id
+  }new {
+    tfName = "\(var.prefix)rta_priv_c"
+    route_table_id = route_table_priv_c.id
+    subnet_id = subnets.subnet_priv_c.id
+  }
+}

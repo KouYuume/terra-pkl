@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "resolvedDependencies": {
+    "package://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-core/terrapkl-core@0": {
+      "type": "remote",
+      "uri": "projectpackage://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-core/terrapkl-core@0.0.1",
+      "checksums": {
+        "sha256": "8d95b4e8207a37128b0ddd782fd3f63aaf0d617d0ee88fb40e36612ac6b34048"
+      }
+    },
+    "package://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-aws/terrapkl-aws@0": {
+      "type": "remote",
+      "uri": "projectpackage://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-aws/terrapkl-aws@0.0.1",
+      "checksums": {
+        "sha256": "aed1dcb6bfe5bbbd64f0b84d6a473610e500c8cdef92a7f37e9094a09c584e89"
+      }
+    }
+  }
+}

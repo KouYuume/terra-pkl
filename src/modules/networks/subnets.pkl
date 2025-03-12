@@ -1,0 +1,64 @@
+import "@aws/vpc/Subnet.pkl"
+import ".../src/var.pkl"
+import "@aws/vpc/NatGateway.pkl"
+import "vpc.pkl"
+
+subnet_pub_a: Subnet = new {
+  tfName = "\(var.prefix)subnet_pub_a"
+  vpc_id = vpc.vpc.id
+  cidr_block = "10.0.0.0/20"
+  availability_zone = "ap-northeast-1a"
+  map_public_ip_on_launch = true
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+subnet_pub_c: Subnet = new {
+  tfName = "\(var.prefix)subnet_pub_c"
+  vpc_id = vpc.vpc.id
+  cidr_block = "10.0.80.0/20"
+  availability_zone = "ap-northeast-1c"
+  map_public_ip_on_launch = true
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+subnet_priv_a: Subnet = new {
+  tfName = "\(var.prefix)subnet_priv_a"
+  vpc_id = vpc.vpc.id
+  cidr_block = "10.0.64.0/20"
+  availability_zone = "ap-northeast-1a"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+subnet_priv_c: Subnet = new {
+  tfName = "\(var.prefix)subnet_priv_c"
+  vpc_id = vpc.vpc.id
+  cidr_block = "10.0.16.0/20"
+  availability_zone = "ap-northeast-1c"
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+ngw_a: NatGateway = new {
+  tfName = "\(var.prefix)ngw_a"
+  allocation_id = vpc.eip_a.id
+  subnet_id = subnet_pub_a.id
+  tags {
+    ["Name"] = tfName
+  }
+}
+
+ngw_c: NatGateway = new {
+  tfName = "\(var.prefix)ngw_c"
+  allocation_id = vpc.eip_c.id
+  subnet_id = subnet_pub_c.id
+  tags {
+    ["Name"] = tfName
+  }
+}

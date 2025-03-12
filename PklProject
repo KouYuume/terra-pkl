@@ -1,0 +1,10 @@
+amends "pkl:Project"
+
+dependencies {
+  ["core"] {
+    uri = "package://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-core/terrapkl-core@0.0.1"
+  }
+  ["aws"] {
+    uri = "package://pkg.pkl-lang.org/github.com/KouYuume/terrapkl-aws/terrapkl-aws@0.0.1"
+  }
+}
